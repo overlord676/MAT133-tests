@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAT133 Practice Test - All Variations</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Lucide icons as inline SVGs
+        const CheckCircle = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        );
+
+        const XCircle = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+        );
+
+        const ArrowRight = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+        );
+
+        const ArrowLeft = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        );
+
+        const RotateCcw = ({ size = 24 }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+        );
+
+        const BookOpen = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+        );
+
+        function MAT133ComprehensiveTest() {
+            const [selectedVariation, setSelectedVariation] = useState(null);
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [answers, setAnswers] = useState({});
+            const [showFeedback, setShowFeedback] = useState({});
+            const [score, setScore] = useState(0);
+            const [submitted, setSubmitted] = useState(false);
+
+            const testVariations = {
+                1: {
+                    name: "Variation 1: Swimming, Bread, Coffee, Tech Repairs",
+                    color: "blue",
+                    questions: [
+                        {
+                            id: "1a",
+                            points: 2,
+                            question: "If a 65-kg person swims at 15 m/min, how much energy do they expend each minute?",
+                            type: "number",
+                            answer: 7.8,
+                            tolerance: 0.1,
+                            units: "kcal",
+                            tableData: {
+                                title: "Swimming Energy E(v, m) in kcal",
+                                headers: ["m↓ \\ v→", "15", "20", "25", "30"],
+                                rows: [
+                                    ["50", "6.5", "8.2", "9.8", "11.5"],
+                                    ["65", "7.8", "9.5", "11.1", "12.8"],
+                                    ["80", "9.1", "10.8", "12.4", "14.1"],
+                                    ["95", "10.4", "12.1", "13.7", "15.4"],
+                                    ["110", "11.7", "13.4", "15.0", "16.7"]
+                                ]
+                            }
+                        },
+                        {
+                            id: "1b",
+                            points: 2,
+                            question: "Estimate f_m(20, 95) using the swimming table (partial derivative with respect to m at v=20, m=95).",
+                            type: "number",
+                            answer: 0.13,
+                            tolerance: 0.02,
+                            units: "kcal per kg",
+                            hint: "Use difference quotient: [f(20, 110) - f(20, 80)] / (110 - 80) = (13.4 - 10.8) / 30"
+                        },
+                        {
+                            id: "4a",
+                            points: 3,
+                            question: "Tech Repair: f(25,45)=12.3, f_x(25,45)=-0.8, f_y(25,45)=0.25. Estimate profit with 27 technicians and $49/hour.",
+                            type: "number",
+                            answer: 11.7,
+                            tolerance: 0.2,
+                            units: "thousand $",
+                            hint: "f(27,49) ≈ f(25,45) + f_x·Δx + f_y·Δy = 12.3 + (-0.8)(2) + (0.25)(4)"
+                        },
+                        {
+                            id: "6a",
+                            points: 3,
+                            question: "f(x,y)=2x²y-6xy+8, at (-3,2). Find gradient ∇f(-3,2). Enter x-component:",
+                            type: "number",
+                            answer: -36,
+                            tolerance: 2,
+                            hint: "f_x=4xy-6y. At (-3,2): f_x=4(-3)(2)-6(2)=-24-12=-36"
+                        },
+                        {
+                            id: "8",
+                            points: 4,
+                            question: "Find x-coordinate of critical point: h(x,y)=2x²-xy+y²-3x+4y-7",
+                            type: "number",
+                            answer: 1,
+                            tolerance: 0.2,
+                            hint: "h_x=4x-y-3=0, h_y=-x+2y+4=0. Solve the system."
+                        }
+                    ]
+                },
+                2: {
+                    name: "Variation 2: Delivery Trucks, Tutoring, Pottery",
+                    color: "green",
+                    questions: [
+                        {
+                            id: "1a",
+                            points: 2,
+                            question: "Truck with 2.0 tonnes at 50 km/h. What is fuel consumption?",
+                            type: "number",
+                            answer: 9.8,
+                            tolerance: 0.1,
+                            units: "L/h",
+                            tableData: {
+                                title: "Fuel Consumption F(s, w) in L/h",
+                                headers: ["w↓ \\ s→", "50", "60", "70", "80"],
+                                rows: [
+                                    ["1.5", "8.5", "10.2", "12.1", "14.3"],
+                                    ["2.0", "9.8", "11.5", "13.4", "15.6"],
+                                    ["2.5", "11.1", "12.8", "14.7", "16.9"],
+                                    ["3.0", "12.4", "14.1", "16.0", "18.2"],
+                                    ["3.5", "13.7", "15.4", "17.3", "19.5"]
+                                ]
+                            }
+                        },
+                        {
+                            id: "1b",
+                            points: 2,
+                            question: "Estimate f_w(60, 3.0) using fuel table.",
+                            type: "number",
+                            answer: 2.6,
+                            tolerance: 0.2,
+                            units: "L/h per tonne",
+                            hint: "[f(60,3.5)-f(60,2.5)]/(3.5-2.5) = (15.4-12.8)/1"
+                        },
+                        {
+                            id: "4a",
+                            points: 3,
+                            question: "Catering: f(12,35)=18.6, f_c=1.2, f_p=0.45. Estimate revenue with 13 chefs, $38 meals.",
+                            type: "number",
+                            answer: 20.55,
+                            tolerance: 0.3,
+                            units: "thousand $",
+                            hint: "f(13,38) ≈ 18.6 + 1.2(1) + 0.45(3)"
+                        },
+                        {
+                            id: "6a",
+                            points: 3,
+                            question: "f(x,y)=-x²+3xy-y²+12, at (4,-1). Find x-component of ∇f(4,-1).",
+                            type: "number",
+                            answer: -11,
+                            tolerance: 2,
+                            hint: "f_x=-2x+3y. At (4,-1): f_x=-2(4)+3(-1)=-8-3=-11"
+                        }
+                    ]
+                },
+                3: {
+                    name: "Variation 3: Smartphones, Coffee, Photography",
+                    color: "purple",
+                    questions: [
+                        {
+                            id: "1a",
+                            points: 2,
+                            question: "10 apps running, 20% brightness. What is battery life?",
+                            type: "number",
+                            answer: 17.2,
+                            tolerance: 0.1,
+                            units: "hours",
+                            tableData: {
+                                title: "Battery Life B(b, a) in hours",
+                                headers: ["a↓ \\ b→", "20", "40", "60", "80"],
+                                rows: [
+                                    ["5", "18.5", "16.2", "13.8", "11.5"],
+                                    ["10", "17.2", "14.9", "12.5", "10.2"],
+                                    ["15", "15.9", "13.6", "11.2", "8.9"],
+                                    ["20", "14.6", "12.3", "9.9", "7.6"],
+                                    ["25", "13.3", "11.0", "8.6", "6.3"]
+                                ]
+                            }
+                        },
+                        {
+                            id: "1b",
+                            points: 2,
+                            question: "Estimate f_a(40, 20) using battery table.",
+                            type: "number",
+                            answer: -0.26,
+                            tolerance: 0.05,
+                            units: "hours per app",
+                            hint: "[f(40,25)-f(40,15)]/(25-15) = (11.0-13.6)/10"
+                        },
+                        {
+                            id: "4a",
+                            points: 3,
+                            question: "Online Store: f(50,15)=28.4, f_x=0.45, f_y=-0.8. Revenue with 55 ads, 13% discount.",
+                            type: "number",
+                            answer: 30.85,
+                            tolerance: 0.3,
+                            units: "thousand $",
+                            hint: "f(55,13) ≈ 28.4 + 0.45(5) + (-0.8)(-2)"
+                        }
+                    ]
+                },
+                4: {
+                    name: "Variation 4: Metal Cooling, Gyms, Wine",
+                    color: "red",
+                    questions: [
+                        {
+                            id: "1a",
+                            points: 2,
+                            question: "Air flow 4 m/s, initial temp 200°C. What is cooling rate?",
+                            type: "number",
+                            answer: 4.5,
+                            tolerance: 0.1,
+                            units: "°C/min",
+                            tableData: {
+                                title: "Cooling Rate C(T, v) in °C/min",
+                                headers: ["v↓ \\ T→", "200", "300", "400", "500"],
+                                rows: [
+                                    ["2", "3.2", "4.8", "6.3", "7.9"],
+                                    ["4", "4.5", "6.1", "7.6", "9.2"],
+                                    ["6", "5.8", "7.4", "8.9", "10.5"],
+                                    ["8", "7.1", "8.7", "10.2", "11.8"],
+                                    ["10", "8.4", "10.0", "11.5", "13.1"]
+                                ]
+                            }
+                        },
+                        {
+                            id: "1b",
+                            points: 2,
+                            question: "Estimate f_T(300, 8) using cooling table.",
+                            type: "number",
+                            answer: 0.016,
+                            tolerance: 0.003,
+                            units: "°C/min per °C",
+                            hint: "[f(400,8)-f(200,8)]/(400-200) = (10.2-7.1)/200"
+                        },
+                        {
+                            id: "4a",
+                            points: 3,
+                            question: "Consulting: f(15,120)=45.8, f_c=2.4, f_h=0.18. Profit with 13 consultants, $130/hour.",
+                            type: "number",
+                            answer: 42.8,
+                            tolerance: 0.3,
+                            units: "thousand $",
+                            hint: "f(13,130) ≈ 45.8 + 2.4(-2) + 0.18(10)"
+                        }
+                    ]
+                },
+                5: {
+                    name: "Variation 5: Factories, Ride-sharing, Chocolate",
+                    color: "orange",
+                    questions: [
+                        {
+                            id: "1a",
+                            points: 2,
+                            question: "60 dB noise, 18°C temperature. What is productivity?",
+                            type: "number",
+                            answer: 38,
+                            tolerance: 1,
+                            units: "units/hour",
+                            tableData: {
+                                title: "Productivity P(T, N) in units/hour",
+                                headers: ["N↓ \\ T→", "18", "20", "22", "24"],
+                                rows: [
+                                    ["55", "42", "48", "51", "49"],
+                                    ["60", "38", "44", "47", "45"],
+                                    ["65", "34", "40", "43", "41"],
+                                    ["70", "30", "36", "39", "37"],
+                                    ["75", "26", "32", "35", "33"]
+                                ]
+                            }
+                        },
+                        {
+                            id: "1b",
+                            points: 2,
+                            question: "Estimate f_N(20, 70) using productivity table.",
+                            type: "number",
+                            answer: -0.8,
+                            tolerance: 0.2,
+                            units: "units/hour per dB",
+                            hint: "[f(20,75)-f(20,65)]/(75-65) = (32-40)/10"
+                        },
+                        {
+                            id: "4a",
+                            points: 3,
+                            question: "Landscaping: f(8,85)=34.2, f_c=3.5, f_p=0.28. Revenue with 11 crews, $80/hour.",
+                            type: "number",
+                            answer: 43.3,
+                            tolerance: 0.3,
+                            units: "thousand $",
+                            hint: "f(11,80) ≈ 34.2 + 3.5(3) + 0.28(-5)"
+                        }
+                    ]
+                }
+            };
+
+            const handleAnswer = (questionId, value) => {
+                setAnswers(prev => ({ ...prev, [questionId]: value }));
+                setShowFeedback(prev => ({ ...prev, [questionId]: false }));
+            };
+
+            const checkAnswer = (question) => {
+                const userAnswer = parseFloat(answers[question.id]);
+                if (isNaN(userAnswer)) return null;
+                return Math.abs(userAnswer - question.answer) <= question.tolerance;
+            };
+
+            const renderQuestion = (question) => {
+                const isChecked = showFeedback[question.id];
+                const isCorrect = isChecked ? checkAnswer(question) : null;
+
+                return (
+                    <div className="space-y-4">
+                        <div className="flex items-start gap-3">
+                            <span className={`font-bold text-lg text-${testVariations[selectedVariation]?.color}-600`}>
+                                Q{question.id}
+                            </span>
+                            <span className="text-sm text-gray-500">({question.points} pts)</span>
+                        </div>
+                        
+                        <p className="text-gray-800 leading-relaxed text-lg">{question.question}</p>
+
+                        {question.tableData && (
+                            <div className="bg-gray-50 p-4 rounded-lg border-2 border-gray-200 overflow-x-auto">
+                                <h4 className="font-semibold text-gray-700 mb-3">{question.tableData.title}</h4>
+                                <table className="min-w-full text-sm border-collapse">
+                                    <thead>
+                                        <tr className="bg-gray-200">
+                                            {question.tableData.headers.map((h, i) => (
+                                                <th key={i} className="border border-gray-400 px-4 py-2 font-bold">{h}</th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {question.tableData.rows.map((row, i) => (
+                                            <tr key={i}>
+                                                {row.map((cell, j) => (
+                                                    <td key={j} className={`border border-gray-300 px-4 py-2 text-center ${j === 0 ? 'font-semibold bg-gray-100' : ''}`}>
+                                                        {cell}
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        <div className="flex gap-3 items-center">
+                            <input
+                                type="number"
+                                step="0.01"
+                                className="border-2 border-gray-300 rounded-lg px-4 py-3 w-48 focus:border-blue-500 focus:outline-none text-lg"
+                                value={answers[question.id] || ''}
+                                onChange={(e) => handleAnswer(question.id, e.target.value)}
+                                placeholder="Your answer"
+                            />
+                            {question.units && <span className="text-gray-600 font-medium">{question.units}</span>}
+                        </div>
+
+                        <button
+                            onClick={() => setShowFeedback(prev => ({ ...prev, [question.id]: true }))}
+                            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-md text-lg"
+                        >
+                            Check Answer
+                        </button>
+
+                        {isChecked && (
+                            <div className={`flex items-start gap-3 p-4 rounded-lg border-2 ${
+                                isCorrect ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'
+                            }`}>
+                                {isCorrect ? (
+                                    <>
+                                        <CheckCircle size={28} className="text-green-600 flex-shrink-0 mt-0.5" />
+                                        <div>
+                                            <p className="text-green-800 font-bold text-xl">Correct! ✓</p>
+                                            <p className="text-green-700 mt-1">+{question.points} points</p>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <XCircle size={28} className="text-red-600 flex-shrink-0 mt-0.5" />
+                                        <div>
+                                            <p className="text-red-800 font-bold text-xl">Not quite right</p>
+                                            {question.hint && (
+                                                <p className="text-red-700 mt-2">
+                                                    <strong>Hint:</strong> {question.hint}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                );
+            };
+
+            const calculateScore = () => {
+                if (!selectedVariation) return 0;
+                let total = 0;
+                testVariations[selectedVariation].questions.forEach(q => {
+                    if (checkAnswer(q)) {
+                        total += q.points;
+                    }
+                });
+                return total;
+            };
+
+            const getTotalPoints = () => {
+                if (!selectedVariation) return 0;
+                return testVariations[selectedVariation].questions.reduce((sum, q) => sum + q.points, 0);
+            };
+
+            const resetTest = () => {
+                setAnswers({});
+                setShowFeedback({});
+                setScore(0);
+                setSubmitted(false);
+                setCurrentQuestion(0);
+            };
+
+            const backToMenu = () => {
+                resetTest();
+                setSelectedVariation(null);
+            };
+
+            if (!selectedVariation) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-6">
+                        <div className="max-w-5xl mx-auto">
+                            <div className="bg-white rounded-2xl shadow-2xl p-8 mb-8">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <BookOpen size={40} className="text-indigo-600" />
+                                    <h1 className="text-4xl font-bold text-gray-800">
+                                        MAT133 Practice Tests
+                                    </h1>
+                                </div>
+                                <p className="text-gray-600 text-lg">
+                                    Calculus and Linear Algebra for Commerce - Term Test 2 Practice
+                                </p>
+                                <p className="text-gray-500 mt-2">
+                                    Choose a test variation to begin. Each has different scenarios but tests the same concepts.
+                                </p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-6">
+                                {Object.entries(testVariations).map(([key, variation]) => (
+                                    <button
+                                        key={key}
+                                        onClick={() => setSelectedVariation(parseInt(key))}
+                                        className="bg-white rounded-xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:scale-105 border-4 border-transparent hover:border-blue-300"
+                                    >
+                                        <div className="flex items-start justify-between mb-3">
+                                            <h3 className="text-xl font-bold text-gray-800">
+                                                Variation {key}
+                                            </h3>
+                                            <span className={`px-3 py-1 rounded-full text-sm font-medium bg-${variation.color}-100 text-${variation.color}-700`}>
+                                                {variation.questions.length} questions
+                                            </span>
+                                        </div>
+                                        <p className="text-gray-600 mb-4">
+                                            {variation.name}
+                                        </p>
+                                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                                            <span>Total points:</span>
+                                            <span className="font-bold text-gray-700">
+                                                {variation.questions.reduce((sum, q) => sum + q.points, 0)}
+                                            </span>
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            const currentVariation = testVariations[selectedVariation];
+            const questions = currentVariation.questions;
+            const totalPoints = getTotalPoints();
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+                            <div className="flex items-start justify-between mb-4">
+                                <div>
+                                    <h1 className="text-3xl font-bold text-gray-800">
+                                        {currentVariation.name}
+                                    </h1>
+                                    <p className="text-gray-600 mt-1">MAT133 Practice Test</p>
+                                </div>
+                                <button
+                                    onClick={backToMenu}
+                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+                                >
+                                    ← Change Test
+                                </button>
+                            </div>
+                            <div className="flex gap-4 text-sm text-gray-600">
+                                <span>Question {currentQuestion + 1} of {questions.length}</span>
+                                <span>•</span>
+                                <span>Total: {totalPoints} points</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-xl shadow-lg p-4 mb-6">
+                            <div className="w-full bg-gray-200 rounded-full h-4">
+                                <div
+                                    className="bg-gradient-to-r from-blue-500 to-indigo-600 h-4 rounded-full transition-all duration-500"
+                                    style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+                            {renderQuestion(questions[currentQuestion])}
+                        </div>
+
+                        <div className="flex justify-between items-center mb-6">
+                            <button
+                                onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
+                                disabled={currentQuestion === 0}
+                                className="flex items-center gap-2 px-5 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:bg-gray-300 disabled:cursor-not-allowed shadow-md"
+                            >
+                                <ArrowLeft size={20} />
+                                Previous
+                            </button>
+
+                            {currentQuestion === questions.length - 1 ? (
+                                <button
+                                    onClick={() => {
+                                        const finalScore = calculateScore();
+                                        setScore(finalScore);
+                                        setSubmitted(true);
+                                    }}
+                                    className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 font-bold shadow-lg text-lg"
+                                >
+                                    Submit Test →
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => setCurrentQuestion(currentQuestion + 1)}
+                                    className="flex items-center gap-2 px-5 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md"
+                                >
+                                    Next
+                                    <ArrowRight size={20} />
+                                </button>
+                            )}
+                        </div>
+
+                        {submitted && (
+                            <div className="bg-white rounded-xl shadow-2xl p-8 border-4 border-green-200">
+                                <div className="text-center">
+                                    <h2 className="text-3xl font-bold text-gray-800 mb-4">Test Complete! 🎉</h2>
+                                    <div className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                                        {score} / {totalPoints}
+                                    </div>
+                                    <p className="text-2xl text-gray-600 mb-6">
+                                        {((score / totalPoints) * 100).toFixed(1)}%
+                                    </p>
+                                    <div className="flex gap-4 justify-center">
+                                        <button
+                                            onClick={resetTest}
+                                            className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 shadow-lg"
+                                        >
+                                            <RotateCcw size={20} />
+                                            Retake This Test
+                                        </button>
+                                        <button
+                                            onClick={backToMenu}
+                                            className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 shadow-lg"
+                                        >
+                                            Try Different Variation
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<MAT133ComprehensiveTest />);
+    </script>
+</body>
+</html>
